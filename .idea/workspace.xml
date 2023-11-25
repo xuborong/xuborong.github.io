@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ae14581-8956-41be-8358-09e7212a0e9c" name="Changes" comment="first">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/404.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_posts/2023-11-25-welcome-to-jekyll.markdown" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/about.markdown" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.markdown" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/navigation.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +60,7 @@
       <recent name="C:\Users\xubor\OneDrive\Desktop\personal_website" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\xubor\OneDrive\Desktop\personal_website\_data" />
       <recent name="C:\Users\xubor\OneDrive\Desktop\personal_website\_layouts" />
     </key>
   </component>
@@ -82,7 +75,7 @@
       <workItem from="1700797895398" duration="269000" />
       <workItem from="1700798286241" duration="60000" />
       <workItem from="1700798574933" duration="5990000" />
-      <workItem from="1700872575018" duration="15865000" />
+      <workItem from="1700872575018" duration="16598000" />
     </task>
     <task id="LOCAL-00001" summary="first">
       <option name="closed" value="true" />
