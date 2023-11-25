@@ -17,3 +17,9 @@ defaults:
       path: ""
     values:
       layout: "default"
+
+theme: minimal-mistakes-jekyll
+
+plugins:
+  - jekyll-data
+  - jekyll-include-cache
