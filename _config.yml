@@ -19,17 +19,22 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Alex's Website
-email: your-email@example.com
+logo: "/assets/images/wiggins_smile.jpg"
+masthead_title: "MUNIU BLOG"
+email: xuborong20001030@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Description muniu!
 #baseurl: "" # the subpath of your site, e.g. /blog
-url: "xuborong.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+url: "https://xuborong.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+#twitter_username: jekyllrb
+github_username:  xuborong
 
 # Build settings
-remote_theme: mmistakes/minimal-mistakes
+remote_theme: mmistakes/minimal-mistakes@4.24.0
 #theme: minimal-mistakes-jekyll
+minimal_mistakes_skin: "air" # "default", "dark", "air", "aqua", etc.
+#locale: "zh"
+
 plugins:
   - jekyll-feed
   - jekyll-include-cache
