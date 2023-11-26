@@ -1,7 +1,7 @@
 ---
 layout: splash
 permalink: /
-title: "LMAO"
+title: "逆天主页"
 header:
   overlay_color: "false" # An RGBA or HEX color for the overlay, or use "false" to disable it.
   overlay_image: /assets/images/persona_3.avif # Path to the full-width header image.
@@ -9,7 +9,7 @@ header:
   cta_label: "Learn More" # Call to action label
   cta_url: "/about/"
   caption: "Photo credit: [PlayStation](https://store.playstation.com/en-ca/product/UP0177-PPSA10872_00-ADDCONTENT200012)"
-excerpt: 'Giggity!'
+excerpt: '如题'
 #feature_row:
 #  - image_path: /assets/images/unsplash-gallery-image-1.jpg
 #    alt: "placeholder image 1"
@@ -21,3 +21,4 @@ excerpt: 'Giggity!'
 # Other optional front matter here
 ---
 
+{% include video id="BV1Qs411X7QR" provider="bilibili" danmaku="1" %}
