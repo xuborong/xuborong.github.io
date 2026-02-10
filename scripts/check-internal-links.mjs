@@ -15,7 +15,11 @@ function walk(dir) {
 function routeToPath(route) {
   if (route === "/") return [path.join(root, "index.html")];
   const clean = route.replace(/^\/+/, "").replace(/\/+$/, "");
-  return [path.join(root, clean, "index.html"), path.join(root, `${clean}.html`)];
+  return [
+    path.join(root, clean),
+    path.join(root, clean, "index.html"),
+    path.join(root, `${clean}.html`)
+  ];
 }
 
 walk(root);
