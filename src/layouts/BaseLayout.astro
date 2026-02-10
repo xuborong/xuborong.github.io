@@ -1,0 +1,57 @@
+---
+import "@styles/global.css";
+import { navigation } from "@data/navigation";
+import { siteConfig } from "@data/site";
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
+const pageDescription = description ?? siteConfig.description;
+const canonical = new URL(Astro.url.pathname, siteConfig.url).toString();
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <h1 class="brand">{siteConfig.mastheadTitle}</h1>
+        <ul class="nav-links">
+          {
+            navigation.map((item) => (
+              <li>
+                <a href={item.href} target={item.external ? "_blank" : undefined} rel={item.external ? "noopener noreferrer" : undefined}>
+                  {item.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </header>
+
+    <main class="main container">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        {siteConfig.title} • <a href={`https://github.com/${siteConfig.githubUsername}`}>GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>

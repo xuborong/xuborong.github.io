@@ -1,0 +1,23 @@
+---
+import { getEntry } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TravelMap from "@components/TravelMap.astro";
+import { travelLocations } from "@data/travel";
+
+const about = await getEntry("pages", "about");
+if (!about) throw new Error("Missing about page content");
+const { Content } = await about.render();
+---
+
+<BaseLayout title={about.data.title} description={about.data.description}>
+  <article class="grid">
+    <section class="post-card">
+      <Content />
+    </section>
+    <section>
+      <h2>Journey Map</h2>
+      <p class="meta">Travel markers are sourced from typed data.</p>
+      <TravelMap locations={travelLocations} />
+    </section>
+  </article>
+</BaseLayout>

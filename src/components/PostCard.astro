@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+  post: CollectionEntry<"blog">;
+};
+
+const { post } = Astro.props;
+const url = `/blog/${post.data.legacySlug}/`;
+---
+
+<article class="post-card">
+  <h3><a href={url}>{post.data.title}</a></h3>
+  <p class="meta">{post.data.pubDate.toLocaleDateString("en-US", { dateStyle: "medium" })}</p>
+  <p>{post.data.description}</p>
+</article>

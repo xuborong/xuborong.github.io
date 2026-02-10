@@ -1,0 +1,26 @@
+---
+type Props = {
+  title: string;
+  excerpt?: string;
+  image?: string;
+  caption?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+};
+
+const { title, excerpt, image, caption, ctaLabel, ctaHref } = Astro.props;
+---
+
+<section class="hero">
+  {image && <img src={image} alt={title} loading="lazy" />}
+  <div class="hero-body">
+    <h2>{title}</h2>
+    {excerpt && <p>{excerpt}</p>}
+    {ctaLabel && ctaHref && (
+      <p>
+        <a href={ctaHref}>{ctaLabel}</a>
+      </p>
+    )}
+    {caption && <p class="meta" set:html={caption} />}
+  </div>
+</section>
