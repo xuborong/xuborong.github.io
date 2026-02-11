@@ -1,4 +1,4 @@
----
+﻿---
 import { ClientRouter } from "astro:transitions";
 import "@styles/global.css";
 import { navigation } from "@data/navigation";
@@ -18,7 +18,7 @@ const canonical = new URL(Astro.url.pathname, siteConfig.url).toString();
 const currentPath = Astro.url.pathname;
 ---
 
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,7 +32,7 @@ const currentPath = Astro.url.pathname;
     <meta property="og:url" content={canonical} />
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
 
     <div class="p5-stage-noise" aria-hidden="true"></div>
     <div class="p5-stage-slab" aria-hidden="true"></div>
@@ -43,13 +43,13 @@ const currentPath = Astro.url.pathname;
     <div class="p5-stage-star p5-stage-star-a" aria-hidden="true"></div>
     <div class="p5-stage-star p5-stage-star-b" aria-hidden="true"></div>
 
-    <div class="p5-date-widget" aria-label="Current date panel">
+    <div class="p5-date-widget" aria-label="当前日期面板">
       <div class="p5-date-day" id="p5-date-day">01</div>
       <div class="p5-date-meta">
-        <p class="p5-date-month" id="p5-date-month">JAN</p>
-        <p class="p5-date-weekday" id="p5-date-weekday">MONDAY</p>
+        <p class="p5-date-month" id="p5-date-month">1月</p>
+        <p class="p5-date-weekday" id="p5-date-weekday">星期一</p>
       </div>
-      <p class="p5-date-weather">Cloudy</p>
+      <p class="p5-date-weather" id="p5-date-weather">天气加载中...</p>
     </div>
 
     <header class="site-header">
@@ -62,9 +62,9 @@ const currentPath = Astro.url.pathname;
     <div class="p5-hud-strip">
       <div class="container p5-hud-inner">
         <p class="p5-hud-badge slant-x">
-          <span>Mission Log</span>
+          <span>任务日志</span>
         </p>
-        <p class="p5-hud-ticker" id="p5-hud-ticker">Preparing route...</p>
+        <p class="p5-hud-ticker" id="p5-hud-ticker">正在准备路线...</p>
       </div>
     </div>
 
@@ -81,17 +81,30 @@ const currentPath = Astro.url.pathname;
         </p>
       </div>
     </footer>
-    <p class="p5-take-your-time" aria-hidden="true">Take Your Time</p>
+    <p class="p5-take-your-time" aria-hidden="true">Man</p>
+
+    <aside class="p5-now-playing-widget" data-now-playing-widget aria-live="polite">
+      <p class="p5-now-playing-chip">Now Playing</p>
+      <p class="p5-now-playing-status" data-now-status>未播放</p>
+      <p class="p5-now-playing-title" data-now-title>等待播放</p>
+      <p class="p5-now-playing-meta" data-now-meta>Spotify</p>
+      <p class="p5-now-playing-detail" data-now-detail>--:-- / --:--</p>
+      <div class="p5-now-playing-actions">
+        <button type="button" class="p5-now-playing-btn" data-now-action="music">音乐页</button>
+        <button type="button" class="p5-now-playing-btn" data-now-action="copy">复制信息</button>
+        <button type="button" class="p5-now-playing-btn" data-now-action="clear">清空</button>
+      </div>
+    </aside>
 
     <P5TransitionLayer client:load />
 
     <script is:inline>
       let revealObserver;
       const tickerMessages = [
-        "Scanning routes for the next city pin.",
-        "Compiling archive entries and field notes.",
-        "Updating dossier panels for the current page.",
-        "Syncing map markers and timeline chips."
+        "正在扫描路线，定位下一座城市。",
+        "正在整理归档条目与旅行笔记。",
+        "正在更新当前页面的档案面板。",
+        "正在同步地图标记与时间线标签。"
       ];
 
       function applyRevealAnimations() {
@@ -148,13 +161,512 @@ const currentPath = Astro.url.pathname;
         const weekdayNode = document.getElementById("p5-date-weekday");
         if (!dayNode || !monthNode || !weekdayNode) return;
         dayNode.textContent = String(now.getDate()).padStart(2, "0");
-        monthNode.textContent = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
-        weekdayNode.textContent = now.toLocaleString("en-US", { weekday: "long" }).toUpperCase();
+        monthNode.textContent = now.toLocaleString("zh-CN", { month: "short" });
+        weekdayNode.textContent = now.toLocaleString("zh-CN", { weekday: "long" });
+      }
+
+      function describeWeatherCode(code) {
+        const descriptions = {
+          0: "晴",
+          1: "晴间多云",
+          2: "多云",
+          3: "阴",
+          45: "有雾",
+          48: "雾凇",
+          51: "小毛毛雨",
+          53: "毛毛雨",
+          55: "强毛毛雨",
+          56: "冻毛毛雨",
+          57: "强冻毛毛雨",
+          61: "小雨",
+          63: "中雨",
+          65: "大雨",
+          66: "冻雨",
+          67: "强冻雨",
+          71: "小雪",
+          73: "中雪",
+          75: "大雪",
+          77: "雪粒",
+          80: "小阵雨",
+          81: "阵雨",
+          82: "强阵雨",
+          85: "小阵雪",
+          86: "强阵雪",
+          95: "雷暴",
+          96: "雷暴伴小冰雹",
+          99: "雷暴伴大冰雹"
+        };
+        return descriptions[code] || "天气";
+      }
+
+      function setWeatherText(text) {
+        const weatherNode = document.getElementById("p5-date-weather");
+        if (!weatherNode) return;
+        weatherNode.textContent = text;
+      }
+
+      async function fetchWeatherSummary(latitude, longitude) {
+        const apiUrl = new URL("https://api.open-meteo.com/v1/forecast");
+        apiUrl.searchParams.set("latitude", String(latitude));
+        apiUrl.searchParams.set("longitude", String(longitude));
+        apiUrl.searchParams.set("current", "weather_code,temperature_2m");
+        apiUrl.searchParams.set("timezone", "auto");
+
+        const data = await fetchJson(apiUrl.toString(), { timeoutMs: 6500, retries: 1 });
+        const code = Number(data?.current?.weather_code);
+        const temperature = data?.current?.temperature_2m;
+        const label = describeWeatherCode(code);
+        const tempText = typeof temperature === "number" ? ` ${Math.round(temperature)}°C` : "";
+        return `${label}${tempText}`;
+      }
+
+      const WEATHER_FALLBACK = {
+        label: "多伦多",
+        latitude: 43.6532,
+        longitude: -79.3832
+      };
+      const WEATHER_CACHE_KEY = "p5:weather:last";
+      const COORDS_CACHE_KEY = "p5:weather:coords";
+      const WEATHER_CACHE_TTL_MS = 15 * 60 * 1000;
+      const COORDS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
+      async function fetchJson(url, { timeoutMs = 6000, retries = 0 } = {}) {
+        let lastError;
+        for (let attempt = 0; attempt <= retries; attempt += 1) {
+          const controller = new AbortController();
+          const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+          try {
+            const response = await fetch(url, { signal: controller.signal });
+            if (!response.ok) throw new Error(`request failed: ${response.status}`);
+            return await response.json();
+          } catch (error) {
+            lastError = error;
+          } finally {
+            window.clearTimeout(timeoutId);
+          }
+        }
+        throw lastError || new Error("request failed");
+      }
+
+      function readCache(key, ttlMs) {
+        try {
+          const raw = window.localStorage.getItem(key);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          if (!parsed || typeof parsed !== "object") return null;
+          if (typeof parsed.timestamp !== "number") return null;
+          if (Date.now() - parsed.timestamp > ttlMs) return null;
+          return parsed.value ?? null;
+        } catch {
+          return null;
+        }
+      }
+
+      function writeCache(key, value) {
+        try {
+          window.localStorage.setItem(
+            key,
+            JSON.stringify({
+              timestamp: Date.now(),
+              value
+            })
+          );
+        } catch {
+          // Ignore storage failures (private mode, quota, etc.).
+        }
+      }
+
+      async function shouldTryGeolocation() {
+        if (!("geolocation" in navigator)) return false;
+        if (!("permissions" in navigator) || !navigator.permissions?.query) return true;
+        try {
+          const status = await navigator.permissions.query({ name: "geolocation" });
+          return status.state !== "denied";
+        } catch {
+          return true;
+        }
+      }
+
+      async function getCurrentCoordinates() {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: false,
+            timeout: 8000,
+            maximumAge: 15 * 60 * 1000
+          });
+        });
+        return {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          label: ""
+        };
+      }
+
+      async function getIpCoordinates() {
+        const ipGeo = await fetchJson("https://ipwho.is/?fields=success,latitude,longitude,city", { timeoutMs: 5000, retries: 0 });
+        if (!ipGeo?.success) throw new Error("ip geo unavailable");
+        const latitude = Number(ipGeo.latitude);
+        const longitude = Number(ipGeo.longitude);
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) throw new Error("invalid ip geo");
+        return {
+          latitude,
+          longitude,
+          label: typeof ipGeo.city === "string" && ipGeo.city.trim() ? ipGeo.city.trim() : "当前城市"
+        };
+      }
+
+      async function applyWeatherWidget() {
+        if (window.__p5WeatherInFlight) return;
+        window.__p5WeatherInFlight = true;
+
+        const cachedWeather = readCache(WEATHER_CACHE_KEY, WEATHER_CACHE_TTL_MS);
+        if (typeof cachedWeather === "string" && cachedWeather) {
+          setWeatherText(cachedWeather);
+        } else {
+          setWeatherText("天气加载中...");
+        }
+
+        try {
+          if (await shouldTryGeolocation()) {
+            try {
+              const current = await getCurrentCoordinates();
+              const currentSummary = await fetchWeatherSummary(current.latitude, current.longitude);
+              setWeatherText(currentSummary);
+              writeCache(WEATHER_CACHE_KEY, currentSummary);
+              writeCache(COORDS_CACHE_KEY, { latitude: current.latitude, longitude: current.longitude });
+              return;
+            } catch {
+              // Continue through fallback sources.
+            }
+          }
+
+          const cachedCoords = readCache(COORDS_CACHE_KEY, COORDS_CACHE_TTL_MS);
+          if (cachedCoords && typeof cachedCoords.latitude === "number" && typeof cachedCoords.longitude === "number") {
+            try {
+              const cachedSummary = await fetchWeatherSummary(cachedCoords.latitude, cachedCoords.longitude);
+              setWeatherText(cachedSummary);
+              writeCache(WEATHER_CACHE_KEY, cachedSummary);
+              return;
+            } catch {
+              // Continue through fallback sources.
+            }
+          }
+
+          try {
+            const ipBased = await getIpCoordinates();
+            const ipSummary = await fetchWeatherSummary(ipBased.latitude, ipBased.longitude);
+            const ipText = `${ipBased.label} ${ipSummary}`;
+            setWeatherText(ipText);
+            writeCache(WEATHER_CACHE_KEY, ipText);
+            writeCache(COORDS_CACHE_KEY, { latitude: ipBased.latitude, longitude: ipBased.longitude });
+            return;
+          } catch {
+            // Continue to fixed fallback.
+          }
+
+          const fallbackSummary = await fetchWeatherSummary(WEATHER_FALLBACK.latitude, WEATHER_FALLBACK.longitude);
+          const fallbackText = `${WEATHER_FALLBACK.label} ${fallbackSummary}`;
+          setWeatherText(fallbackText);
+          writeCache(WEATHER_CACHE_KEY, fallbackText);
+        } catch {
+          setWeatherText(cachedWeather || "天气不可用");
+        } finally {
+          window.__p5WeatherInFlight = false;
+        }
+      }
+
+
+            const NOW_PLAYING_CACHE_KEY = "p5:music:now-playing";
+      const NOW_PLAYING_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+      function parseEmbedMeta(node) {
+        if (!node) return null;
+
+        const source = node.getAttribute("src") || "";
+        const pathParts = source.split("?")[0].split("/").filter(Boolean);
+        const embedIndex = pathParts.indexOf("embed");
+        const kindFromPath = embedIndex >= 0 ? pathParts[embedIndex + 1] : "";
+
+        const chip = node.dataset.itemChip || (kindFromPath === "track" ? "单曲" : kindFromPath === "playlist" ? "歌单" : "音乐");
+        const title = node.dataset.itemTitle || (kindFromPath === "track" ? "Spotify 单曲" : kindFromPath === "playlist" ? "Spotify 歌单" : "Spotify");
+        const description = node.dataset.itemDesc || "Spotify";
+        const id = node.dataset.itemId || pathParts[embedIndex + 2] || "spotify";
+
+        return { id, chip, title, description };
+      }
+
+      function formatSeconds(totalSeconds) {
+        if (!Number.isFinite(totalSeconds) || totalSeconds < 0) return "--:--";
+        const rounded = Math.floor(totalSeconds);
+        const minutes = Math.floor(rounded / 60);
+        const seconds = String(rounded % 60).padStart(2, "0");
+        return `${minutes}:${seconds}`;
+      }
+
+      function normalizeNowPlayingState(state) {
+        return {
+          id: state?.id || "spotify",
+          chip: state?.chip || "音乐",
+          title: state?.title || "Spotify",
+          description: state?.description || "Spotify",
+          status: state?.status || "未播放",
+          progress: Number.isFinite(state?.progress) ? state.progress : null,
+          duration: Number.isFinite(state?.duration) ? state.duration : null
+        };
+      }
+
+      function renderNowPlaying(state, { persist = true } = {}) {
+        const next = normalizeNowPlayingState(state);
+        const widget = document.querySelector("[data-now-playing-widget]");
+
+        if (widget) {
+          const titleNode = widget.querySelector("[data-now-title]");
+          const metaNode = widget.querySelector("[data-now-meta]");
+          const statusNode = widget.querySelector("[data-now-status]");
+          const detailNode = widget.querySelector("[data-now-detail]");
+
+          if (titleNode && metaNode && statusNode && detailNode) {
+            titleNode.textContent = next.title;
+            metaNode.textContent = `${next.chip}${next.description ? ` · ${next.description}` : ""}`;
+            statusNode.textContent = next.status;
+            detailNode.textContent = `${formatSeconds(next.progress)} / ${formatSeconds(next.duration)}`;
+            widget.setAttribute("data-playing", next.status === "播放中" ? "true" : "false");
+          }
+        }
+
+        window.__p5NowPlayingState = next;
+        if (persist) writeCache(NOW_PLAYING_CACHE_KEY, next);
+      }
+
+      function parseMessagePayload(payload) {
+        if (!payload) return null;
+        if (typeof payload === "string") {
+          try {
+            return JSON.parse(payload);
+          } catch {
+            return null;
+          }
+        }
+        if (typeof payload !== "object") return null;
+
+        if (typeof payload.data === "string") {
+          try {
+            const parsedData = JSON.parse(payload.data);
+            return { ...payload, data: parsedData };
+          } catch {
+            return payload;
+          }
+        }
+
+        return payload;
+      }
+
+      function extractArtistsText(source) {
+        const candidates = [
+          source?.artists,
+          source?.track?.artists,
+          source?.item?.artists,
+          source?.metadata?.artists,
+          source?.artist,
+          source?.artist_name,
+          source?.subtitle
+        ];
+
+        for (const value of candidates) {
+          if (!value) continue;
+
+          if (Array.isArray(value)) {
+            const names = value
+              .map((artist) => (typeof artist === "string" ? artist : artist?.name || artist?.title))
+              .filter(Boolean);
+            if (names.length > 0) return names.join(" / ");
+          }
+
+          if (typeof value === "string" && value.trim()) {
+            return value.trim();
+          }
+        }
+
+        return "";
+      }
+
+      function findTrackFields(source) {
+        if (!source || typeof source !== "object") return { title: "", artists: "" };
+
+        const visited = new WeakSet();
+        const queue = [source];
+
+        while (queue.length > 0) {
+          const current = queue.shift();
+          if (!current || typeof current !== "object") continue;
+          if (visited.has(current)) continue;
+          visited.add(current);
+
+          const title =
+            current?.track?.name ||
+            current?.track?.title ||
+            current?.item?.name ||
+            current?.item?.title ||
+            current?.name ||
+            current?.title ||
+            current?.track_name ||
+            current?.trackName ||
+            current?.metadata?.title ||
+            "";
+
+          const artists = extractArtistsText(current);
+          if (title || artists) {
+            return { title: title || "", artists: artists || "" };
+          }
+
+          for (const key of Object.keys(current)) {
+            const value = current[key];
+            if (!value || typeof value !== "object") continue;
+            queue.push(value);
+          }
+        }
+
+        return { title: "", artists: "" };
+      }
+
+      function applyNowPlayingWidget() {
+        const cached = readCache(NOW_PLAYING_CACHE_KEY, NOW_PLAYING_CACHE_TTL_MS);
+        if (!window.__p5NowPlayingState && cached && typeof cached === "object") {
+          renderNowPlaying(cached, { persist: false });
+        } else if (window.__p5NowPlayingState) {
+          renderNowPlaying(window.__p5NowPlayingState, { persist: false });
+        } else {
+          renderNowPlaying({
+            status: "未播放",
+            title: "等待播放",
+            chip: "音乐",
+            description: "Spotify",
+            progress: null,
+            duration: null
+          }, { persist: false });
+        }
+
+        const embedNodes = Array.from(document.querySelectorAll('iframe[src*="open.spotify.com/embed"], iframe[data-music-embed]'));
+        window.__p5SpotifyEmbeds = embedNodes;
+
+        const activateEmbed = (node, status = "已选中") => {
+          const meta = parseEmbedMeta(node);
+          if (!meta) return;
+          renderNowPlaying({ ...meta, status, progress: null, duration: null });
+        };
+
+        if (embedNodes.length > 0 && (!window.__p5NowPlayingState || window.__p5NowPlayingState.title === "等待播放")) {
+          activateEmbed(embedNodes[0], "待机");
+        }
+
+        embedNodes.forEach((node) => {
+          if (node.dataset.p5NowBound === "true") return;
+          node.dataset.p5NowBound = "true";
+
+          const activate = () => activateEmbed(node, "已选中");
+          const card = node.closest("[data-music-card]");
+
+          node.addEventListener("load", activate, { once: true });
+          node.addEventListener("pointerdown", activate);
+          card?.addEventListener("pointerdown", activate);
+        });
+
+        const widget = document.querySelector("[data-now-playing-widget]");
+        if (widget && !widget.dataset.actionsBound) {
+          widget.dataset.actionsBound = "true";
+          widget.addEventListener("click", async (event) => {
+            const button = event.target.closest("[data-now-action]");
+            if (!button) return;
+
+            const action = button.getAttribute("data-now-action");
+            if (action === "music") {
+              window.location.href = "/music/";
+              return;
+            }
+
+            if (action === "clear") {
+              try {
+                window.localStorage.removeItem(NOW_PLAYING_CACHE_KEY);
+              } catch {
+                // Ignore storage failures.
+              }
+              window.__p5NowPlayingState = null;
+              renderNowPlaying({
+                status: "未播放",
+                title: "等待播放",
+                chip: "音乐",
+                description: "Spotify",
+                progress: null,
+                duration: null
+              }, { persist: false });
+              return;
+            }
+
+            if (action === "copy") {
+              const current = window.__p5NowPlayingState || {};
+              const text = `${current.title || "Spotify"} - ${current.description || "Spotify"} (${current.status || "未播放"})`;
+              try {
+                await navigator.clipboard.writeText(text);
+                renderNowPlaying({ ...current, status: "已复制" }, { persist: false });
+                window.setTimeout(() => {
+                  const latest = window.__p5NowPlayingState || current;
+                  renderNowPlaying({ ...latest, status: latest.status === "已复制" ? "待机" : latest.status }, { persist: false });
+                }, 1200);
+              } catch {
+                renderNowPlaying({ ...current, status: "复制失败" }, { persist: false });
+              }
+            }
+          });
+        }
+
+        if (!window.__p5NowPlayingMessageBound) {
+          window.__p5NowPlayingMessageBound = true;
+
+          window.addEventListener("message", (event) => {
+            if (typeof event.origin !== "string" || !event.origin.includes("spotify.com")) return;
+
+            const message = parseMessagePayload(event.data);
+            if (!message) return;
+
+            const payload = message.data || message.payload || message;
+            const playback = payload?.playback_update || payload?.data?.playback_update || payload?.payload?.playback_update || payload?.payload || payload?.data || payload;
+            if (!playback || typeof playback !== "object") return;
+
+            const isPlaying = playback?.isPaused === false || playback?.isPlaying === true;
+            const status = isPlaying ? "播放中" : "已暂停";
+
+            const trackInfo = findTrackFields({ message, payload, playback });
+
+            const progressMs = Number(playback?.position || playback?.position_ms || playback?.progress_ms || 0);
+            const durationMs = Number(playback?.duration || playback?.duration_ms || playback?.track?.duration_ms || playback?.item?.duration_ms || 0);
+
+            const sourceNode = Array.isArray(window.__p5SpotifyEmbeds)
+              ? window.__p5SpotifyEmbeds.find((node) => node.contentWindow === event.source)
+              : null;
+            const sourceMeta = parseEmbedMeta(sourceNode);
+            const previous = window.__p5NowPlayingState || {};
+
+            const hasSignal = Boolean(trackInfo.title || trackInfo.artists || progressMs > 0 || durationMs > 0 || typeof playback?.isPaused === "boolean" || typeof playback?.isPlaying === "boolean");
+            if (!hasSignal) return;
+
+            renderNowPlaying({
+              id: sourceMeta?.id || previous.id || playback?.item?.id || playback?.track?.id || "spotify",
+              chip: sourceMeta?.chip || previous.chip || "音乐",
+              title: trackInfo.title || previous.title || sourceMeta?.title || "Spotify",
+              description: trackInfo.artists || previous.description || sourceMeta?.description || "Spotify",
+              status,
+              progress: progressMs > 0 ? progressMs / 1000 : previous.progress,
+              duration: durationMs > 0 ? durationMs / 1000 : previous.duration
+            });
+          });
+        }
       }
 
       applyRevealAnimations();
       applyTicker();
       applyDateWidget();
+      applyWeatherWidget();
+      applyNowPlayingWidget();
 
       if (!window.__p5LayoutBindings) {
         window.__p5LayoutBindings = true;
@@ -162,13 +674,30 @@ const currentPath = Astro.url.pathname;
           applyRevealAnimations();
           applyTicker();
           applyDateWidget();
+          applyWeatherWidget();
+          applyNowPlayingWidget();
         });
 
         window.__p5HudTickerTimer = window.setInterval(() => {
           applyTicker();
           applyDateWidget();
         }, 3600);
+
+        window.__p5WeatherTimer = window.setInterval(() => {
+          applyWeatherWidget();
+        }, 10 * 60 * 1000);
       }
     </script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+

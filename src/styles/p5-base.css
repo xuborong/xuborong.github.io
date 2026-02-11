@@ -1,4 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@400;500;700;900&family=Teko:wght@500;600;700&display=swap");
+
+:root {
+  --p5-font-body: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Segoe UI", sans-serif;
+  --p5-font-display: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Segoe UI", sans-serif;
+  --p5-font-display-latin: "Teko", "Bebas Neue", "Noto Sans SC", sans-serif;
+}
 
 *,
 *::before,
@@ -22,10 +28,12 @@ body {
     linear-gradient(205deg, rgb(251 248 242 / 13%) 0%, transparent 28%),
     linear-gradient(180deg, #08090b 0%, #121317 100%);
   color: var(--p5-text);
-  font-family: "Oswald", "Segoe UI", sans-serif;
+  font-family: var(--p5-font-body);
   font-size: clamp(1rem, 0.94rem + 0.22vw, 1.1rem);
   line-height: 1.55;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 ::selection {
@@ -53,11 +61,11 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   margin: 0 0 var(--p5-space-3);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.015em;
   line-height: 1.08;
-  text-transform: uppercase;
 }
 
 h1 {
@@ -91,6 +99,7 @@ img {
   padding: var(--p5-space-6) 0 var(--p5-space-8);
   position: relative;
   z-index: 1;
+  flex: 1 0 auto;
 }
 
 .meta {
@@ -224,7 +233,8 @@ img {
   background: #0b0b0f;
   border: 2px solid var(--p5-white);
   color: var(--p5-white);
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display-latin);
+  font-weight: 700;
   font-size: 2.2rem;
   line-height: 1;
   text-align: center;
@@ -247,7 +257,8 @@ img {
   background: var(--p5-red);
   color: var(--p5-white);
   border: 2px solid #0b0b0f;
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.08em;
   padding: 0 0.55rem;
 }
@@ -267,7 +278,7 @@ img {
   background: var(--p5-gold);
   color: #0d0d10;
   border: 2px solid #0d0d10;
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
   letter-spacing: 0.07em;
   padding: 0 0.45rem;
   transform: rotate(4deg);
@@ -292,7 +303,8 @@ img {
 
 .brand {
   color: var(--p5-white);
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display-latin);
+  font-weight: 700;
   font-size: 1.55rem;
   letter-spacing: 0.1em;
   text-decoration: none;
@@ -351,8 +363,8 @@ img {
 .p5-nav-links a {
   color: #0b0b10;
   text-decoration: none;
-  text-transform: uppercase;
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.08em;
   font-size: 1.15rem;
   display: inline-flex;
@@ -419,8 +431,8 @@ img {
   color: #0d0d10;
   border: 2px solid #0d0d10;
   padding: 0.03rem 0.55rem;
-  font-family: "Bebas Neue", Impact, sans-serif;
-  text-transform: uppercase;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.08em;
   font-size: 0.95rem;
 }
@@ -486,8 +498,8 @@ img {
 }
 
 .p5-route-corner-core {
-  font-family: "Bebas Neue", Impact, sans-serif;
-  text-transform: uppercase;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.1em;
   color: var(--p5-white);
   font-size: 1.2rem;
@@ -589,8 +601,8 @@ img {
   background: var(--p5-red);
   border: 2px solid var(--p5-white);
   color: var(--p5-white);
-  text-transform: uppercase;
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.1em;
   font-size: 1rem;
   padding: 0.1rem 0.7rem;
@@ -662,7 +674,8 @@ img {
   width: fit-content;
   background: var(--p5-gold);
   color: var(--p5-ink);
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.09em;
   font-size: 0.95rem;
   padding: 0.12rem 0.8rem;
@@ -687,9 +700,9 @@ img {
   min-height: 28px;
   padding: 0.04rem 0.62rem;
   border: 2px solid var(--p5-white);
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   font-size: 0.92rem;
 }
 
@@ -712,7 +725,8 @@ img {
   background:
     linear-gradient(120deg, var(--p5-gold) 0 72%, var(--p5-red) 72% 100%);
   color: #0a0a0d;
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   font-size: 1.2rem;
   letter-spacing: 0.08em;
   text-decoration: none;
@@ -753,6 +767,67 @@ img {
   border: 0;
 }
 
+.p5-video-grid {
+  margin-top: var(--p5-space-5);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.p5-music-grid {
+  margin-top: var(--p5-space-5);
+  gap: var(--p5-space-5);
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  align-items: start;
+}
+
+.music-feature {
+  display: grid;
+  gap: var(--p5-space-3);
+  align-content: start;
+}
+
+.music-feature h3 {
+  margin-bottom: 0;
+}
+
+.music-feature .meta {
+  margin-bottom: 0;
+}
+
+.music-feature .p5-divider-rails {
+  margin: 0;
+}
+
+.music-frame {
+  border: 2px solid var(--p5-white);
+  background: #050507;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgb(0 0 0 / 30%);
+}
+
+.music-frame-playlist {
+  min-height: 352px;
+}
+
+.music-frame-track {
+  min-height: 152px;
+}
+
+.music-frame iframe {
+  width: 100%;
+  border: 0;
+  display: block;
+  background: #121212;
+}
+
+.music-frame-playlist iframe {
+  height: 352px;
+}
+
+.music-frame-track iframe {
+  height: 152px;
+}
+
 .p5-post-grid {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
@@ -783,9 +858,17 @@ img {
     linear-gradient(150deg, var(--p5-red) 0 25%, var(--p5-white) 25% 100%);
 }
 
-.p5-card-variant-1 .p5-card-title a,
-.p5-card-variant-2 .p5-card-title a {
-  color: var(--p5-white);
+.p5-card-variant-1 .p5-card-date,
+.p5-card-variant-2 .p5-card-date {
+  border-color: var(--p5-white);
+}
+
+.p5-card-variant-1 > p:not(.p5-card-chip):not(.p5-card-date) {
+  color: #f2eee7;
+}
+
+.p5-card-variant-2 > p:not(.p5-card-chip):not(.p5-card-date) {
+  color: #fff2ec;
 }
 
 .p5-card-chip {
@@ -793,17 +876,28 @@ img {
   margin-bottom: var(--p5-space-2);
   background: var(--p5-ink);
   color: var(--p5-white);
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display);
+  font-weight: 900;
   letter-spacing: 0.08em;
   padding: 0.06rem 0.65rem;
 }
 
 .p5-card-title {
   margin-bottom: var(--p5-space-2);
+  line-height: 1.28;
 }
 
 .p5-card-title a {
+  display: inline;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background: rgb(251 248 242 / 94%);
+  border: 1px solid rgb(13 13 16 / 32%);
   color: #09090b;
+  font-family: var(--p5-font-body);
+  font-weight: 900;
+  letter-spacing: 0;
+  padding: 0.02rem 0.25rem;
   text-decoration: none;
 }
 
@@ -854,6 +948,12 @@ img {
 
 .p5-post-title-stack {
   margin-bottom: var(--p5-space-4);
+}
+
+.p5-post-title-stack h1 {
+  font-family: var(--p5-font-body);
+  font-weight: 900;
+  letter-spacing: 0;
 }
 
 .p5-post-date-chip {
@@ -956,7 +1056,7 @@ img {
 
 .map-card .leaflet-popup-content {
   margin: 0.42rem 0.54rem;
-  font-family: "Oswald", "Segoe UI", sans-serif;
+  font-family: var(--p5-font-body);
 }
 
 .map-card .leaflet-control-zoom a {
@@ -984,10 +1084,11 @@ img {
   bottom: 0.48rem;
   z-index: 120;
   margin: 0;
-  font-family: "Bebas Neue", Impact, sans-serif;
+  font-family: var(--p5-font-display-latin);
+  font-weight: 700;
   font-size: clamp(2.1rem, 1.9rem + 1vw, 3.2rem);
   text-transform: uppercase;
-  color: rgb(251 248 242 / 34%);
+  color: rgb(251 248 242 / 58%);
   letter-spacing: 0.08em;
   transform: rotate(-7deg);
   pointer-events: none;
@@ -1082,3 +1183,129 @@ img {
     transform: none;
   }
 }
+
+:lang(en) h1,
+:lang(en) h2,
+:lang(en) h3,
+:lang(en) h4,
+:lang(en) .brand,
+:lang(en) .p5-date-day,
+:lang(en) .p5-take-your-time {
+  font-family: var(--p5-font-display-latin);
+  text-transform: uppercase;
+}
+
+@media (width <= 640px) {
+  .music-feature {
+    padding: var(--p5-space-4);
+  }
+
+  .music-frame-playlist,
+  .music-frame-playlist iframe {
+    min-height: 320px;
+    height: 320px;
+  }
+
+  .music-frame-track,
+  .music-frame-track iframe {
+    min-height: 168px;
+    height: 168px;
+  }
+}
+
+.p5-now-playing-widget {
+  position: fixed;
+  left: 1rem;
+  bottom: 4rem;
+  z-index: 140;
+  width: min(320px, calc(100vw - 2rem));
+  border: 2px solid var(--p5-white);
+  background: linear-gradient(160deg, rgb(9 9 12 / 94%) 0 74%, rgb(230 31 39 / 84%) 74% 100%);
+  box-shadow: 0 14px 30px rgb(0 0 0 / 45%);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 0.85rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.p5-now-playing-widget[data-playing="true"] {
+  border-color: var(--p5-gold);
+  box-shadow: 0 16px 34px rgb(0 0 0 / 52%), 0 0 0 1px rgb(255 199 63 / 45%);
+}
+
+.p5-now-playing-chip {
+  margin: 0;
+  width: fit-content;
+  min-height: 24px;
+  padding: 0 0.52rem;
+  border: 2px solid #131318;
+  background: var(--p5-gold);
+  color: #111;
+  font-family: var(--p5-font-display-latin);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+}
+
+.p5-now-playing-status,
+.p5-now-playing-title,
+.p5-now-playing-meta {
+  margin: 0;
+}
+
+.p5-now-playing-status {
+  color: rgb(251 248 242 / 82%);
+  font-size: 0.9rem;
+}
+
+.p5-now-playing-title {
+  color: var(--p5-white);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.p5-now-playing-meta {
+  color: rgb(251 248 242 / 72%);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+.p5-now-playing-detail {
+  margin: 0;
+  color: rgb(251 248 242 / 68%);
+  font-family: var(--p5-font-display-latin);
+  letter-spacing: 0.04em;
+  font-size: 0.88rem;
+}
+
+.p5-now-playing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.p5-now-playing-btn {
+  border: 2px solid var(--p5-white);
+  background: rgb(16 16 20 / 86%);
+  color: var(--p5-white);
+  padding: 0.16rem 0.55rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.p5-now-playing-btn:hover {
+  border-color: var(--p5-gold);
+  color: var(--p5-gold);
+}
+
+@media (width <= 640px) {
+  .p5-now-playing-widget {
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 3rem;
+    width: auto;
+  }
+}
+
