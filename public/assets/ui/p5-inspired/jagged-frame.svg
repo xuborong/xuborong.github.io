@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+  <path d="M0 0 H1000 V1000 H0 Z M24 24 L976 24 L976 976 L24 976 Z" fill-rule="evenodd" fill="rgba(255,255,255,0.08)"/>
+  <path d="M0 120 L130 80 L300 120 L440 60 L590 120 L740 74 L920 122 L1000 98 V0 H0 Z" fill="rgba(255,255,255,0.14)"/>
+  <path d="M0 896 L110 842 L260 896 L460 834 L650 902 L810 850 L1000 904 V1000 H0 Z" fill="rgba(230,31,39,0.24)"/>
+</svg>

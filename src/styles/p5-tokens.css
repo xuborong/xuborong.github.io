@@ -1,0 +1,31 @@
+:root {
+  --p5-bg: #0a0a0d;
+  --p5-bg-soft: #131317;
+  --p5-surface: #f7f1e7;
+  --p5-surface-soft: #f0e9dc;
+  --p5-ink: #0b0b0c;
+  --p5-text: #f8f6f2;
+  --p5-text-soft: #e4ddd3;
+  --p5-red: #e61f27;
+  --p5-red-soft: #ff4a42;
+  --p5-white: #fbf8f2;
+  --p5-gold: #ffca48;
+  --p5-focus: #ffe071;
+  --p5-border: #1a1a1f;
+  --p5-shadow: 0 14px 38px rgb(0 0 0 / 48%);
+  --p5-shadow-hard: 0 22px 48px rgb(0 0 0 / 58%);
+  --p5-space-1: 0.35rem;
+  --p5-space-2: 0.65rem;
+  --p5-space-3: 0.95rem;
+  --p5-space-4: 1.25rem;
+  --p5-space-5: 1.7rem;
+  --p5-space-6: 2.3rem;
+  --p5-space-7: 3rem;
+  --p5-space-8: 3.9rem;
+  --p5-max: 1100px;
+  --p5-duration-fast: 120ms;
+  --p5-duration-mid: 220ms;
+  --p5-duration-slow: 380ms;
+  --p5-ease: cubic-bezier(0.2, 0.74, 0.25, 1);
+  --p5-cut-size: 22px;
+}

@@ -1,0 +1,38 @@
+---
+import { getEntry } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Hero from "@components/Hero.astro";
+
+const home = await getEntry("pages", "home");
+if (!home) throw new Error("Missing home page content");
+---
+
+<BaseLayout title={home.data.title} description={home.data.description}>
+  <Hero
+    title={home.data.title}
+    excerpt={home.data.excerpt}
+    image={home.data.heroImage}
+    caption={home.data.heroCaption}
+    ctaLabel={home.data.ctaLabel}
+    ctaHref={home.data.ctaHref}
+  />
+
+  {
+    home.data.bilibiliVideoId && (
+      <section class="video-feature cut-top-left cut-bottom-right p5-reveal">
+        <p class="p5-section-chip slant-x">Broadcast</p>
+        <h3>Featured Video</h3>
+        <p class="meta">A recent favorite clip from Bilibili.</p>
+        <div class="p5-divider-rails" aria-hidden="true"></div>
+        <div class="video-frame">
+          <iframe
+            title="Bilibili Video"
+            src={`https://player.bilibili.com/player.html?bvid=${home.data.bilibiliVideoId}&page=1`}
+            allowfullscreen
+            loading="lazy"
+          />
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

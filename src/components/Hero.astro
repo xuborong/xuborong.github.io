@@ -1,0 +1,16 @@
+---
+import P5Hero from "@components/p5/P5Hero";
+
+type Props = {
+  title: string;
+  excerpt?: string;
+  image?: string;
+  caption?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+};
+
+const { title, excerpt, image, caption, ctaLabel, ctaHref } = Astro.props;
+---
+
+<P5Hero title={title} excerpt={excerpt} image={image} caption={caption} ctaLabel={ctaLabel} ctaHref={ctaHref} client:load />

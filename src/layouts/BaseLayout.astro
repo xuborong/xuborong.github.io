@@ -1,0 +1,174 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@styles/global.css";
+import { navigation } from "@data/navigation";
+import { siteConfig } from "@data/site";
+import P5Nav from "@components/p5/P5Nav";
+import P5TransitionLayer from "@components/p5/P5TransitionLayer";
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
+const pageDescription = description ?? siteConfig.description;
+const canonical = new URL(Astro.url.pathname, siteConfig.url).toString();
+const currentPath = Astro.url.pathname;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ClientRouter />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <div class="p5-stage-noise" aria-hidden="true"></div>
+    <div class="p5-stage-slab" aria-hidden="true"></div>
+    <div class="p5-stage-stripe" aria-hidden="true"></div>
+    <div class="p5-stage-speedlines" aria-hidden="true"></div>
+    <div class="p5-stage-orb p5-stage-orb-a" aria-hidden="true"></div>
+    <div class="p5-stage-orb p5-stage-orb-b" aria-hidden="true"></div>
+    <div class="p5-stage-star p5-stage-star-a" aria-hidden="true"></div>
+    <div class="p5-stage-star p5-stage-star-b" aria-hidden="true"></div>
+
+    <div class="p5-date-widget" aria-label="Current date panel">
+      <div class="p5-date-day" id="p5-date-day">01</div>
+      <div class="p5-date-meta">
+        <p class="p5-date-month" id="p5-date-month">JAN</p>
+        <p class="p5-date-weekday" id="p5-date-weekday">MONDAY</p>
+      </div>
+      <p class="p5-date-weather">Cloudy</p>
+    </div>
+
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand slant-x" href="/">{siteConfig.mastheadTitle}</a>
+        <P5Nav items={navigation} currentPath={currentPath} client:load />
+      </div>
+    </header>
+
+    <div class="p5-hud-strip">
+      <div class="container p5-hud-inner">
+        <p class="p5-hud-badge slant-x">
+          <span>Mission Log</span>
+        </p>
+        <p class="p5-hud-ticker" id="p5-hud-ticker">Preparing route...</p>
+      </div>
+    </div>
+
+    <main class="main container" id="main-content">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>
+          {siteConfig.title}
+          <span aria-hidden="true"> // </span>
+          <a href={`https://github.com/${siteConfig.githubUsername}`}>GitHub</a>
+        </p>
+      </div>
+    </footer>
+    <p class="p5-take-your-time" aria-hidden="true">Take Your Time</p>
+
+    <P5TransitionLayer client:load />
+
+    <script is:inline>
+      let revealObserver;
+      const tickerMessages = [
+        "Scanning routes for the next city pin.",
+        "Compiling archive entries and field notes.",
+        "Updating dossier panels for the current page.",
+        "Syncing map markers and timeline chips."
+      ];
+
+      function applyRevealAnimations() {
+        const shouldReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const revealNodes = document.querySelectorAll(".p5-reveal");
+
+        revealNodes.forEach((node) => node.classList.remove("is-visible"));
+
+        if (revealObserver) revealObserver.disconnect();
+        revealObserver = undefined;
+
+        if (shouldReduce) {
+          document.documentElement.classList.remove("p5-motion-ready");
+          revealNodes.forEach((node) => node.classList.add("is-visible"));
+          return;
+        }
+
+        document.documentElement.classList.add("p5-motion-ready");
+
+        if (!("IntersectionObserver" in window)) {
+          revealNodes.forEach((node) => node.classList.add("is-visible"));
+          return;
+        }
+
+        revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.16, rootMargin: "0px 0px -64px 0px" }
+        );
+
+        revealNodes.forEach((node, index) => {
+          node.style.transitionDelay = `${Math.min(index * 70, 320)}ms`;
+          revealObserver.observe(node);
+        });
+      }
+
+      function applyTicker() {
+        const tickerNode = document.getElementById("p5-hud-ticker");
+        if (!tickerNode) return;
+        const nextIndex = window.__p5HudTickerIndex || 0;
+        tickerNode.textContent = tickerMessages[nextIndex % tickerMessages.length];
+        window.__p5HudTickerIndex = nextIndex + 1;
+      }
+
+      function applyDateWidget() {
+        const now = new Date();
+        const dayNode = document.getElementById("p5-date-day");
+        const monthNode = document.getElementById("p5-date-month");
+        const weekdayNode = document.getElementById("p5-date-weekday");
+        if (!dayNode || !monthNode || !weekdayNode) return;
+        dayNode.textContent = String(now.getDate()).padStart(2, "0");
+        monthNode.textContent = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
+        weekdayNode.textContent = now.toLocaleString("en-US", { weekday: "long" }).toUpperCase();
+      }
+
+      applyRevealAnimations();
+      applyTicker();
+      applyDateWidget();
+
+      if (!window.__p5LayoutBindings) {
+        window.__p5LayoutBindings = true;
+        document.addEventListener("astro:page-load", () => {
+          applyRevealAnimations();
+          applyTicker();
+          applyDateWidget();
+        });
+
+        window.__p5HudTickerTimer = window.setInterval(() => {
+          applyTicker();
+          applyDateWidget();
+        }, 3600);
+      }
+    </script>
+  </body>
+</html>
