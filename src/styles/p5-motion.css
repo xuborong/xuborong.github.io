@@ -1,0 +1,130 @@
+.p5-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.p5-motion-ready .p5-reveal {
+  opacity: 0;
+  transform: translateY(20px) scale(0.985);
+  transition:
+    opacity var(--p5-duration-slow) var(--p5-ease),
+    transform var(--p5-duration-slow) var(--p5-ease);
+}
+
+.p5-motion-ready .p5-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.p5-nav,
+.p5-nav-links a,
+.p5-cta,
+.p5-card,
+.p5-card-sweep {
+  transition:
+    transform var(--p5-duration-mid) var(--p5-ease),
+    opacity var(--p5-duration-mid) var(--p5-ease),
+    background-color var(--p5-duration-mid) var(--p5-ease),
+    border-color var(--p5-duration-mid) var(--p5-ease),
+    color var(--p5-duration-mid) var(--p5-ease);
+}
+
+.p5-nav-links li {
+  transition: transform var(--p5-duration-mid) var(--p5-ease);
+}
+
+.p5-nav-links li:hover {
+  transform: skewX(-14deg) translateY(-2px);
+}
+
+@media (width <= 880px) {
+  .p5-nav-links li:hover {
+    transform: none;
+  }
+}
+
+.p5-card:hover .p5-card-sweep,
+.p5-card:focus-within .p5-card-sweep {
+  transform: translateX(140%);
+}
+
+.p5-stage-orb-a {
+  animation: p5-float-a 8s ease-in-out infinite alternate;
+}
+
+.p5-stage-orb-b {
+  animation: p5-float-b 9.5s ease-in-out infinite alternate;
+}
+
+.p5-stage-star-a {
+  animation: p5-star-spin 18s linear infinite;
+}
+
+.p5-stage-star-b {
+  animation: p5-star-spin-reverse 14s linear infinite;
+}
+
+.p5-route-corner-ring {
+  animation: p5-spin 3.8s linear infinite;
+}
+
+@keyframes p5-float-a {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(24px, -18px, 0);
+  }
+}
+
+@keyframes p5-float-b {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-20px, 16px, 0);
+  }
+}
+
+@keyframes p5-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes p5-star-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes p5-star-spin-reverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .p5-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

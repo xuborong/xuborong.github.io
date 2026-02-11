@@ -10,13 +10,16 @@ const { Content } = await about.render();
 ---
 
 <BaseLayout title={about.data.title} description={about.data.description}>
-  <article class="grid">
-    <section class="post-card">
+  <article class="grid about-layout">
+    <section class="about-story p5-prose cut-top-left cut-bottom-right p5-reveal">
+      <p class="p5-section-chip slant-x">Dossier</p>
       <Content />
     </section>
-    <section>
+    <section class="about-map p5-reveal">
+      <p class="p5-section-chip slant-x">Journey</p>
       <h2>Journey Map</h2>
       <p class="meta">Travel markers are sourced from typed data.</p>
+      <div class="p5-divider-rails" aria-hidden="true"></div>
       <TravelMap locations={travelLocations} />
     </section>
   </article>

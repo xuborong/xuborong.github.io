@@ -16,9 +16,13 @@ const { Content } = await post.render();
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="post-card">
-    <h1>{post.data.title}</h1>
-    <p class="meta">{post.data.pubDate.toLocaleDateString("en-US", { dateStyle: "long" })}</p>
+  <article class="p5-post-article p5-prose cut-top-left cut-bottom-right p5-reveal">
+    <header class="p5-post-title-stack">
+      <p class="meta p5-post-date-chip slant-x">
+        <span>{post.data.pubDate.toLocaleDateString("en-US", { dateStyle: "long" })}</span>
+      </p>
+      <h1>{post.data.title}</h1>
+    </header>
     <Content />
   </article>
 </BaseLayout>

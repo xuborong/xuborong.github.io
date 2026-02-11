@@ -19,15 +19,19 @@ if (!home) throw new Error("Missing home page content");
 
   {
     home.data.bilibiliVideoId && (
-      <section style="margin-top: 1.5rem;">
+      <section class="video-feature cut-top-left cut-bottom-right p5-reveal">
+        <p class="p5-section-chip slant-x">Broadcast</p>
         <h3>Featured Video</h3>
-        <iframe
-          title="Bilibili Video"
-          src={`https://player.bilibili.com/player.html?bvid=${home.data.bilibiliVideoId}&page=1`}
-          width="100%"
-          height="440"
-          allowfullscreen
-        />
+        <p class="meta">A recent favorite clip from Bilibili.</p>
+        <div class="p5-divider-rails" aria-hidden="true"></div>
+        <div class="video-frame">
+          <iframe
+            title="Bilibili Video"
+            src={`https://player.bilibili.com/player.html?bvid=${home.data.bilibiliVideoId}&page=1`}
+            allowfullscreen
+            loading="lazy"
+          />
+        </div>
       </section>
     )
   }

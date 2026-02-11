@@ -9,8 +9,13 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 ---
 
 <BaseLayout title="Blog" description="Posts and updates">
-  <h2>Blog</h2>
-  <div class="grid">
-    {posts.map((post) => <PostCard post={post} />)}
+  <section class="p5-section-heading p5-reveal">
+    <p class="p5-section-chip slant-x">Archive</p>
+    <h2>Blog</h2>
+    <p>Posts and updates from projects, ideas, and milestones.</p>
+    <div class="p5-divider-rails" aria-hidden="true"></div>
+  </section>
+  <div class="grid p5-post-grid">
+    {posts.map((post, index) => <PostCard post={post} index={index} />)}
   </div>
 </BaseLayout>

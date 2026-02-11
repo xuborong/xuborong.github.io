@@ -10,37 +10,136 @@ const markersJson = JSON.stringify(locations);
 ---
 
 <div class="map-card">
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-  <div id="travel-map" data-markers={markersJson}></div>
+  <div class="travel-map" data-travel-map data-markers={markersJson}></div>
 </div>
 
-<script
-  is:inline
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-  crossorigin=""
-></script>
 <script is:inline>
-  const mapNode = document.getElementById("travel-map");
-  const Leaflet = window.L;
-  if (mapNode && Leaflet) {
-    const markers = JSON.parse(mapNode.dataset.markers || "[]");
-    const map = Leaflet.map(mapNode).setView([29.9853899, 122.20778], 2);
+  (function () {
+    const LEAFLET_CSS_ID = "leaflet-css-cdn";
+    const LEAFLET_JS_ID = "leaflet-js-cdn";
+    const LEAFLET_CSS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    const LEAFLET_JS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
 
-    Leaflet.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+    function ensureLeafletCss() {
+      if (document.getElementById(LEAFLET_CSS_ID)) return;
+      const link = document.createElement("link");
+      link.id = LEAFLET_CSS_ID;
+      link.rel = "stylesheet";
+      link.href = LEAFLET_CSS_URL;
+      link.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
+      link.crossOrigin = "";
+      document.head.appendChild(link);
+    }
 
-    markers.forEach((marker) => {
-      const item = Leaflet.marker([marker.lat, marker.lng]).addTo(map);
-      const summary = `${marker.name}${marker.period ? ` (${marker.period})` : ""}`;
-      item.bindPopup(summary);
-    });
-  }
+    function ensureLeafletJs() {
+      if (window.L) return Promise.resolve(window.L);
+      if (window.__leafletLoadPromise) return window.__leafletLoadPromise;
+
+      window.__leafletLoadPromise = new Promise((resolve, reject) => {
+        let script = document.getElementById(LEAFLET_JS_ID);
+        if (!script) {
+          script = document.createElement("script");
+          script.id = LEAFLET_JS_ID;
+          script.src = LEAFLET_JS_URL;
+          script.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
+          script.crossOrigin = "";
+          document.body.appendChild(script);
+        }
+
+        script.addEventListener("load", () => resolve(window.L), { once: true });
+        script.addEventListener("error", (error) => reject(error), { once: true });
+      });
+
+      return window.__leafletLoadPromise;
+    }
+
+    function parseMarkers(rawValue) {
+      try {
+        const parsed = JSON.parse(rawValue || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function getPinIcon(Leaflet) {
+      return Leaflet.divIcon({
+        className: "p5-map-pin-wrapper",
+        html: '<span class="p5-map-pin"></span>',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+      });
+    }
+
+    function initializeTravelMaps() {
+      const Leaflet = window.L;
+      if (!Leaflet) return;
+
+      const mapNodes = document.querySelectorAll("[data-travel-map]");
+      mapNodes.forEach((mapNode) => {
+        if (mapNode.__travelMapInstance) {
+          mapNode.__travelMapInstance.invalidateSize();
+          return;
+        }
+
+        const markers = parseMarkers(mapNode.dataset.markers);
+        const map = Leaflet.map(mapNode, { zoomControl: true, worldCopyJump: true }).setView([29.9853899, 122.20778], 2);
+        mapNode.__travelMapInstance = map;
+
+        Leaflet.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        const icon = getPinIcon(Leaflet);
+        const markerRefs = [];
+        markers.forEach((marker) => {
+          if (typeof marker?.lat !== "number" || typeof marker?.lng !== "number") return;
+          const item = Leaflet.marker([marker.lat, marker.lng], { icon }).addTo(map);
+          const summary = `${marker.name}${marker.period ? ` (${marker.period})` : ""}`;
+          item.bindPopup(summary);
+          markerRefs.push(item);
+        });
+
+        if (markerRefs.length > 0) {
+          const bounds = Leaflet.featureGroup(markerRefs).getBounds();
+          map.fitBounds(bounds.pad(0.22));
+        }
+
+        window.requestAnimationFrame(() => map.invalidateSize());
+      });
+    }
+
+    function bootTravelMap() {
+      ensureLeafletCss();
+      ensureLeafletJs()
+        .then(() => initializeTravelMaps())
+        .catch(() => {
+          document.querySelectorAll("[data-travel-map]").forEach((mapNode) => {
+            mapNode.classList.add("travel-map-fallback");
+            mapNode.textContent = "Map data is unavailable right now. Please refresh once network access is available.";
+          });
+        });
+    }
+
+    if (!window.__travelMapBootstrapped) {
+      window.__travelMapBootstrapped = true;
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", bootTravelMap, { once: true });
+      } else {
+        bootTravelMap();
+      }
+      document.addEventListener("astro:page-load", bootTravelMap);
+      window.addEventListener("resize", () => {
+        document.querySelectorAll("[data-travel-map]").forEach((mapNode) => {
+          if (mapNode.__travelMapInstance) {
+            mapNode.__travelMapInstance.invalidateSize();
+          }
+        });
+      });
+    } else {
+      bootTravelMap();
+    }
+  })();
 </script>

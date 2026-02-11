@@ -1,16 +1,16 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import P5Card from "@components/p5/P5Card";
 
 type Props = {
   post: CollectionEntry<"blog">;
+  index?: number;
 };
 
-const { post } = Astro.props;
+const { post, index = 0 } = Astro.props;
 const url = `/blog/${post.data.legacySlug}/`;
+const dateText = post.data.pubDate.toLocaleDateString("en-US", { dateStyle: "medium" });
+const variant = index % 3;
 ---
 
-<article class="post-card">
-  <h3><a href={url}>{post.data.title}</a></h3>
-  <p class="meta">{post.data.pubDate.toLocaleDateString("en-US", { dateStyle: "medium" })}</p>
-  <p>{post.data.description}</p>
-</article>
+<P5Card title={post.data.title} description={post.data.description} dateText={dateText} url={url} variant={variant} client:visible />
