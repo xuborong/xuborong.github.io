@@ -22,7 +22,7 @@ export default function P5Card({ title, description, dateText, url, variant = 0 
       whileFocus={shouldReduceMotion ? undefined : { y: -6, rotate: -0.5, skewX: -1.5 }}
       transition={{ duration: 0.28 }}
     >
-      <p className="p5-card-chip slant-x">Entry</p>
+      <p className="p5-card-chip slant-x">条目</p>
       <h3 className="p5-card-title">
         <a href={url}>{title}</a>
       </h3>

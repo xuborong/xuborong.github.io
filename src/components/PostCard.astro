@@ -9,7 +9,7 @@ type Props = {
 
 const { post, index = 0 } = Astro.props;
 const url = `/blog/${post.data.legacySlug}/`;
-const dateText = post.data.pubDate.toLocaleDateString("en-US", { dateStyle: "medium" });
+const dateText = post.data.pubDate.toLocaleDateString("zh-CN", { dateStyle: "medium" });
 const variant = index % 3;
 ---
 

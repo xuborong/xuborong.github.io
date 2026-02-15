@@ -1285,11 +1285,36 @@ img {
   gap: 0.4rem;
 }
 
+.p5-now-playing-player-shell {
+  position: fixed;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  width: 320px;
+  height: 152px;
+  opacity: 0.01;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.p5-now-playing-player-host {
+  width: 320px;
+  height: 152px;
+}
+
+.p5-now-playing-player-shell iframe {
+  width: 320px;
+  height: 152px;
+  border: 0;
+}
+
 .p5-now-playing-btn {
   border: 2px solid var(--p5-white);
   background: rgb(16 16 20 / 86%);
   color: var(--p5-white);
   padding: 0.16rem 0.55rem;
+  display: inline-block;
+  text-decoration: none;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -1298,6 +1323,11 @@ img {
 .p5-now-playing-btn:hover {
   border-color: var(--p5-gold);
   color: var(--p5-gold);
+}
+
+.p5-now-playing-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 @media (width <= 640px) {

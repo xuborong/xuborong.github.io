@@ -49,7 +49,7 @@ export default function P5Hero({ title, excerpt, image, caption, ctaLabel, ctaHr
 
         <div className="p5-hero-body">
           <motion.p className="p5-hero-tag slant-x" initial={{ x: -40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.3 }}>
-            Phantom Chronicle
+            怪盗纪行
           </motion.p>
 
           <motion.h1 initial={{ x: -48, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.42, delay: 0.08 }}>
@@ -63,8 +63,8 @@ export default function P5Hero({ title, excerpt, image, caption, ctaLabel, ctaHr
           )}
 
           <motion.div className="p5-hero-strip-row" initial={{ x: -26, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.28, delay: 0.2 }}>
-            <span className="p5-hero-strip p5-hero-strip-ink">Archive Route</span>
-            <span className="p5-hero-strip p5-hero-strip-alert">Live Update</span>
+            <span className="p5-hero-strip p5-hero-strip-ink">归档路线</span>
+            <span className="p5-hero-strip p5-hero-strip-alert">实时更新</span>
           </motion.div>
 
           {ctaLabel && ctaHref && (

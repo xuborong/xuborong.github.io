@@ -1,12 +1,11 @@
 ---
-title: "MUNIU Home"
-description: "Personal homepage and highlights"
+title: "牢詹球迷"
+description: "个人主页与精选内容"
 permalink: "/"
 heroImage: "/assets/images/persona_3.avif"
-heroCaption: "Photo credit: <a href='https://store.playstation.com/en-ca/product/UP0177-PPSA10872_00-ADDCONTENT200012'>PlayStation</a>"
-ctaLabel: "Learn More"
+heroCaption: "图片来源：<a href='https://store.playstation.com/en-ca/product/UP0177-PPSA10872_00-ADDCONTENT200012'>PlayStation</a>"
+ctaLabel: "了解更多"
 ctaHref: "/about/"
-excerpt: "Warriors for the Championship"
-bilibiliVideoId: "BV1Qs411X7QR"
+excerpt: "勇士这赛季又毁了"
 ---
-Welcome to Alex's personal homepage.
+欢迎来到 Alex 的个人主页。

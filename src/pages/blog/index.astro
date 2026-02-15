@@ -8,11 +8,11 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 );
 ---
 
-<BaseLayout title="Blog" description="Posts and updates">
+<BaseLayout title="博客" description="文章与更新">
   <section class="p5-section-heading p5-reveal">
-    <p class="p5-section-chip slant-x">Archive</p>
-    <h2>Blog</h2>
-    <p>Posts and updates from projects, ideas, and milestones.</p>
+    <p class="p5-section-chip slant-x">归档</p>
+    <h2>博客</h2>
+    <p>记录项目、想法与成长节点的文章和动态。</p>
     <div class="p5-divider-rails" aria-hidden="true"></div>
   </section>
   <div class="grid p5-post-grid">

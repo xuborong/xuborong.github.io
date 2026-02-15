@@ -40,6 +40,21 @@ function getSpotifyEmbedUrl(rawUrl: string) {
     return rawUrl;
   }
 }
+
+function getSpotifyUri(rawUrl: string) {
+  try {
+    const parsed = new URL(rawUrl);
+    if (!parsed.hostname.includes("spotify.com")) return "";
+    const pathParts = parsed.pathname.split("/").filter(Boolean);
+    const embedIndex = pathParts.indexOf("embed");
+    const kind = embedIndex >= 0 ? pathParts[embedIndex + 1] : pathParts[0];
+    const itemId = embedIndex >= 0 ? pathParts[embedIndex + 2] : pathParts[1];
+    if (!kind || !itemId) return "";
+    return `spotify:${kind}:${itemId}`;
+  } catch {
+    return "";
+  }
+}
 ---
 
 <BaseLayout title="音乐" description="我的 Spotify 歌单与单曲">
@@ -59,6 +74,7 @@ function getSpotifyEmbedUrl(rawUrl: string) {
         data-item-title={item.title}
         data-item-desc={item.description}
         data-item-chip={item.chip}
+        data-item-uri={getSpotifyUri(item.embedUrl)}
       >
         <p class="p5-section-chip slant-x">{item.chip}</p>
         <h3>{item.title}</h3>
@@ -71,6 +87,7 @@ function getSpotifyEmbedUrl(rawUrl: string) {
             data-item-title={item.title}
             data-item-desc={item.description}
             data-item-chip={item.chip}
+            data-item-uri={getSpotifyUri(item.embedUrl)}
             title={`Spotify ${item.chip}：${item.title}`}
             src={getSpotifyEmbedUrl(item.embedUrl)}
             width="100%"
