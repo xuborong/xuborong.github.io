@@ -62,7 +62,7 @@ export default function P5TransitionLayer() {
             transition={{ duration: 0.3, delay: 0.08 }}
           >
             <span className="p5-route-corner-ring"></span>
-            <span className="p5-route-corner-core">Shift</span>
+            <span className="p5-route-corner-core">切换</span>
           </motion.span>
         </motion.div>
       )}

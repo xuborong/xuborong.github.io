@@ -19,6 +19,9 @@ const markersJson = JSON.stringify(locations);
     const LEAFLET_JS_ID = "leaflet-js-cdn";
     const LEAFLET_CSS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
     const LEAFLET_JS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    const DEFAULT_CENTER = [29.9853899, 122.20778];
+    const DEFAULT_ZOOM = 2;
+    const CURRENT_LOCATION_ZOOM = 11;
 
     function ensureLeafletCss() {
       if (document.getElementById(LEAFLET_CSS_ID)) return;
@@ -72,6 +75,44 @@ const markersJson = JSON.stringify(locations);
       });
     }
 
+    async function centerOnCurrentLocation(map, Leaflet) {
+      if (!("geolocation" in navigator)) return false;
+
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: false,
+            timeout: 7000,
+            maximumAge: 10 * 60 * 1000
+          });
+        });
+
+        const latitude = Number(position?.coords?.latitude);
+        const longitude = Number(position?.coords?.longitude);
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return false;
+
+        map.setView([latitude, longitude], CURRENT_LOCATION_ZOOM, { animate: false });
+
+        if (!map.__currentLocationMarker) {
+          map.__currentLocationMarker = Leaflet.circleMarker([latitude, longitude], {
+            radius: 7,
+            color: "#fbf8f2",
+            weight: 2,
+            fillColor: "#e61f27",
+            fillOpacity: 1
+          })
+            .addTo(map)
+            .bindPopup("当前位置");
+        } else {
+          map.__currentLocationMarker.setLatLng([latitude, longitude]);
+        }
+
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
     function initializeTravelMaps() {
       const Leaflet = window.L;
       if (!Leaflet) return;
@@ -84,7 +125,7 @@ const markersJson = JSON.stringify(locations);
         }
 
         const markers = parseMarkers(mapNode.dataset.markers);
-        const map = Leaflet.map(mapNode, { zoomControl: true, worldCopyJump: true }).setView([29.9853899, 122.20778], 2);
+        const map = Leaflet.map(mapNode, { zoomControl: true, worldCopyJump: true }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
         mapNode.__travelMapInstance = map;
 
         Leaflet.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -102,12 +143,13 @@ const markersJson = JSON.stringify(locations);
           markerRefs.push(item);
         });
 
-        if (markerRefs.length > 0) {
-          const bounds = Leaflet.featureGroup(markerRefs).getBounds();
-          map.fitBounds(bounds.pad(0.22));
-        }
-
-        window.requestAnimationFrame(() => map.invalidateSize());
+        centerOnCurrentLocation(map, Leaflet).then((didCenterOnCurrentLocation) => {
+          if (!didCenterOnCurrentLocation && markerRefs.length > 0) {
+            const bounds = Leaflet.featureGroup(markerRefs).getBounds();
+            map.fitBounds(bounds.pad(0.22));
+          }
+          window.requestAnimationFrame(() => map.invalidateSize());
+        });
       });
     }
 
@@ -118,7 +160,7 @@ const markersJson = JSON.stringify(locations);
         .catch(() => {
           document.querySelectorAll("[data-travel-map]").forEach((mapNode) => {
             mapNode.classList.add("travel-map-fallback");
-            mapNode.textContent = "Map data is unavailable right now. Please refresh once network access is available.";
+            mapNode.textContent = "地图数据暂时不可用。网络恢复后请刷新页面。";
           });
         });
     }

@@ -1,0 +1,104 @@
+﻿---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { spotifyPlaylists, spotifyTracks, type SpotifyEmbedItem } from "@data/music";
+
+type MusicEmbedCard = SpotifyEmbedItem & {
+  chip: string;
+  frameClass: "music-frame-playlist" | "music-frame-track";
+  frameHeight: number;
+};
+
+const musicEmbeds: MusicEmbedCard[] = [
+  ...spotifyPlaylists.map((item) => ({
+    ...item,
+    chip: "歌单",
+    frameClass: "music-frame-playlist" as const,
+    frameHeight: 352
+  })),
+  ...spotifyTracks.map((item) => ({
+    ...item,
+    chip: "单曲",
+    frameClass: "music-frame-track" as const,
+    frameHeight: 152
+  }))
+];
+
+function getSpotifyEmbedUrl(rawUrl: string) {
+  try {
+    const parsed = new URL(rawUrl);
+    if (parsed.hostname.includes("spotify.com")) {
+      if (!parsed.pathname.startsWith("/embed/")) {
+        parsed.pathname = `/embed${parsed.pathname}`;
+      }
+      if (!parsed.searchParams.has("utm_source")) {
+        parsed.searchParams.set("utm_source", "generator");
+      }
+      parsed.searchParams.set("theme", "0");
+    }
+    return parsed.toString();
+  } catch {
+    return rawUrl;
+  }
+}
+
+function getSpotifyUri(rawUrl: string) {
+  try {
+    const parsed = new URL(rawUrl);
+    if (!parsed.hostname.includes("spotify.com")) return "";
+    const pathParts = parsed.pathname.split("/").filter(Boolean);
+    const embedIndex = pathParts.indexOf("embed");
+    const kind = embedIndex >= 0 ? pathParts[embedIndex + 1] : pathParts[0];
+    const itemId = embedIndex >= 0 ? pathParts[embedIndex + 2] : pathParts[1];
+    if (!kind || !itemId) return "";
+    return `spotify:${kind}:${itemId}`;
+  } catch {
+    return "";
+  }
+}
+---
+
+<BaseLayout title="音乐" description="我的 Spotify 歌单与单曲">
+  <section class="p5-section-heading p5-reveal">
+    <p class="p5-section-chip slant-x">声轨</p>
+    <h2>音乐</h2>
+    <p>这里展示我常听的 Spotify 歌单和单曲。</p>
+    <div class="p5-divider-rails" aria-hidden="true"></div>
+  </section>
+
+  <section class="grid p5-music-grid">
+    {musicEmbeds.map((item) => (
+      <article
+        class="video-feature music-feature cut-top-left cut-bottom-right p5-reveal"
+        data-music-card
+        data-item-id={item.id}
+        data-item-title={item.title}
+        data-item-desc={item.description}
+        data-item-chip={item.chip}
+        data-item-uri={getSpotifyUri(item.embedUrl)}
+      >
+        <p class="p5-section-chip slant-x">{item.chip}</p>
+        <h3>{item.title}</h3>
+        <p class="meta">{item.description}</p>
+        <div class="p5-divider-rails" aria-hidden="true"></div>
+        <div class={`music-frame ${item.frameClass}`}>
+          <iframe
+            data-music-embed
+            data-item-id={item.id}
+            data-item-title={item.title}
+            data-item-desc={item.description}
+            data-item-chip={item.chip}
+            data-item-uri={getSpotifyUri(item.embedUrl)}
+            title={`Spotify ${item.chip}：${item.title}`}
+            src={getSpotifyEmbedUrl(item.embedUrl)}
+            width="100%"
+            height={item.frameHeight}
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          ></iframe>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

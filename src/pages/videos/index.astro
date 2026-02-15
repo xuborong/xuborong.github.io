@@ -1,0 +1,43 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { favoriteVideos } from "@data/videos";
+---
+
+<BaseLayout title="B站精选" description="ikun playlist">
+  <section class="p5-section-heading p5-reveal">
+    <p class="p5-section-chip slant-x">严肃放送</p>
+    <h2>B站精选</h2>
+    <p>都是好东西。</p>
+    <div class="p5-divider-rails" aria-hidden="true"></div>
+  </section>
+
+  {
+    favoriteVideos.length > 0 ? (
+      <div class="grid p5-video-grid">
+        {favoriteVideos.map((video) => (
+          <section class="video-feature cut-top-left cut-bottom-right p5-reveal">
+            <p class="p5-section-chip slant-x">必看</p>
+            <h3>{video.title}</h3>
+            <p class="meta">{video.description}</p>
+            <div class="p5-divider-rails" aria-hidden="true"></div>
+            <div class="video-frame">
+              <iframe
+                title={`哔哩哔哩视频：${video.title}`}
+                src={`https://player.bilibili.com/player.html?bvid=${video.bvid}&page=1`}
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+              />
+            </div>
+          </section>
+        ))}
+      </div>
+    ) : (
+      <section class="video-feature cut-top-left cut-bottom-right p5-reveal">
+        <p class="p5-section-chip slant-x">放送</p>
+        <h3>暂无视频</h3>
+        <p class="meta">可在 `src/data/videos.ts` 里添加你喜欢的视频。</p>
+      </section>
+    )
+  }
+</BaseLayout>

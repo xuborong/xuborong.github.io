@@ -1,8 +1,6 @@
 ---
-title: "Journey"
-description: "Travel and milestones"
+title: "旅程"
+description: "旅行与里程碑"
 permalink: "/about/"
 ---
-This is Alex's about section.
-
-Go Warriors!
+这里是 Alex 的关于页面。
